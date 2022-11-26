@@ -3,7 +3,7 @@ const fs = require('fs')
 
 module.exports = (options = {}) => {
 
-  const { targets = [], hook = 'buildStart',interpreter="python" } = options
+  const { targets = [], hook = 'buildStart',interpreter="python",dirProject=null} = options
   return {
     name: 'python-vue',
     [hook]: async() => {
@@ -28,15 +28,16 @@ module.exports = (options = {}) => {
 
     const { execSync } = require("child_process");
     if (id.endsWith(".vue")){
-      let stdout=execSync(`${interpreter} -c "import vbuild; vbuild.build('${id}')"`).toString()
+      let stdout=execSync(`${interpreter} -c "import vbuild; vbuild.build('${id}','${dirProject}')"`).toString()
       
       return {
         code:stdout
       }
     }
     if (id.endsWith(".py")){
-      let stdout=execSync(`${interpreter} -c "import vbuild; vbuild.src_py2js('${id}')"`).toString()
-      console.log("uuuuu",stdout)
+  
+      let stdout=execSync(`${interpreter} -c "import vbuild; vbuild.src_py2js('${id}','${dirProject}')"`).toString()
+
       return {
         code:stdout
       }
